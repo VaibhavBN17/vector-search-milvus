@@ -27,12 +27,21 @@ def insert_url_document(collection: Collection, content, url, embedding):
 # ---------------------------------
 def search_url_documents(collection: Collection, query_embedding, limit=10):
 
-    search_params = {
-        "metric_type": "COSINE",   # ✅ MUST match index metric
-        "params": {
-            "ef": 64               # better recall than 32
-        }
+    # search_params = {
+    #     "metric_type": "COSINE",   # ✅ MUST match index metric
+    #     "params": {
+    #         "ef": 64               # better recall than 32
+    #     }
+    # }
+
+    index_params = {
+    "index_type": "HNSW",
+    "metric_type": "COSINE",
+    "params": {
+        "M": 16,
+        "efConstruction": 200
     }
+}
 
     results = collection.search(
         data=[query_embedding],
