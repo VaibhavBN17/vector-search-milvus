@@ -6,7 +6,7 @@ from pymilvus import connections, Collection
 from app.models import insert_url_document, search_url_documents
 # from app.schemas import UrlDocumentInput, TextInput
 from app.schemas import UrlDocumentInput, VectorInput
-# from app.embedding import generate_embedding
+from app.embedding import generate_embedding
 import threading
 
 # -----------------------------
