@@ -117,14 +117,12 @@ async def insert_url(data: UrlDocumentInput, request: Request):
 @app.post("/search-url")
 async def search_url(data: VectorInput, request: Request):
     collection = request.app.state.collection
-    loop = asyncio.get_running_loop()
 
-    # Direct vector search (NO embedding generation)
     rows = search_url_documents(
-    collection,
-    data.vector,
-    10
-)
+        collection,
+        data.vector,
+        10
+    )
 
     return [
         {
