@@ -4,8 +4,7 @@ import asyncio
 from datetime import datetime
 from pymilvus import connections, Collection
 from app.models import insert_url_document, search_url_documents
-# from app.schemas import UrlDocumentInput, TextInput
-from app.schemas import UrlDocumentInput, VectorInput
+from app.schemas import UrlDocumentInput, TextInput
 from app.embedding import generate_embedding
 import threading
 
@@ -83,45 +82,25 @@ async def insert_url(data: UrlDocumentInput, request: Request):
 # -----------------------------
 # SEARCH ENDPOINT
 # -----------------------------
-# @app.post("/search-url")
-# async def search_url(data: TextInput, request: Request):
-#     collection = request.app.state.collection
-#     loop = asyncio.get_running_loop()
-
-#     # 1️⃣ Generate embedding
-#     query_embedding = await loop.run_in_executor(
-#         None,
-#         generate_embedding,
-#         data.text
-#     )
-
-#     # 2️⃣ Search Milvus
-#     rows = await loop.run_in_executor(
-#         None,
-#         search_url_documents,
-#         collection,
-#         query_embedding,
-#         10  # top_k
-#     )
-
-#     return [
-#         {
-#             "content": row[0],
-#             "url": row[1],
-#             "distance": float(row[2])
-#         }
-#         for row in rows
-#     ]
-
-
 @app.post("/search-url")
-async def search_url(data: VectorInput, request: Request):
+async def search_url(data: TextInput, request: Request):
     collection = request.app.state.collection
+    loop = asyncio.get_running_loop()
 
-    rows = search_url_documents(
+    # 1️⃣ Generate embedding
+    query_embedding = await loop.run_in_executor(
+        None,
+        generate_embedding,
+        data.text
+    )
+
+    # 2️⃣ Search Milvus
+    rows = await loop.run_in_executor(
+        None,
+        search_url_documents,
         collection,
-        data.vector,
-        10
+        query_embedding,
+        10  # top_k
     )
 
     return [
@@ -132,6 +111,7 @@ async def search_url(data: VectorInput, request: Request):
         }
         for row in rows
     ]
+
 
 # -----------------------------
 # LOGGING MIDDLEWARE
