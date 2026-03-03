@@ -25,7 +25,7 @@ def insert_url_document(collection: Collection, content, url, embedding):
 # ---------------------------------
 # SEARCH DOCUMENTS
 # ---------------------------------
-def search_url_documents(collection: Collection, query_embedding, limit=10):
+def search_url_documents(collection: Collection, query_embedding, limit=5):
 
     search_params = {
         "metric_type": "COSINE",   # ✅ MUST match index metric
