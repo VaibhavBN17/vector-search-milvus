@@ -100,7 +100,7 @@ async def search_url(data: TextInput, request: Request):
         search_url_documents,
         collection,
         query_embedding,
-        10  # top_k
+        5  # top_k
     )
 
     return [
